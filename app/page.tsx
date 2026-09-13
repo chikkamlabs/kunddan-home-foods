@@ -1,15 +1,19 @@
-import Image from "next/image";
+import Header from './header';
+import HomeScreen from './homescreen/page';
+import FeaturedProducts from './featuredproducts';
+import CategoriesSection from './categoriesSection';
+import Footer from './footer';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            Heyy Kunddan Home foods
-          </h1>
-        </div>
+    <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#231E1A]">
+      <Header />
+      <main className="flex-1">
+        <HomeScreen />
+        <FeaturedProducts />
+        <CategoriesSection />
       </main>
+      <Footer />
     </div>
   );
 }

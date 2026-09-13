@@ -1,26 +1,762 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Color System */
+    --color-primary: #963A1F;
+    --color-primary-hover: #7E2E16;
+    --color-primary-light: #FBF0EB;
+    --color-primary-foreground: #FFFFFF;
+    
+    --color-secondary: #EFE8DE;
+    --color-secondary-hover: #E3DACD;
+    --color-secondary-foreground: #382A22;
+    
+    --color-background: #FAF6F0;
+    --color-surface: #FFFFFF;
+    --color-surface-muted: #F3ECE1;
+    --color-surface-dark: #1E1A17;
+    --color-surface-dark-card: #241F1C;
+    
+    --color-border: #E8E0D2;
+    --color-border-subtle: #F0E9DD;
+    --color-border-dark: #38312B;
+    
+    --color-text-primary: #231E1A;
+    --color-text-secondary: #6B5E54;
+    --color-text-muted: #96887D;
+    --color-text-inverse: #F8F5F0;
+    --color-text-inverse-muted: #C8BFB5;
+    
+    --color-accent-gold: #C07629;
+    --color-accent-terracotta: #A44328;
+    --color-tag-eyebrow: #9E3E22;
+    
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-pill: 9999px;
+    
+    --shadow-subtle: 0 2px 8px rgba(35, 30, 26, 0.04);
+    --shadow-card: 0 4px 20px rgba(35, 30, 26, 0.06);
+    --shadow-dropdown: 0 10px 30px rgba(35, 30, 26, 0.12);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Typography Classes */
+.font-brand-display {
+  font-family: Georgia, "Playfair Display", "Times New Roman", serif;
+}
+
+.text-page-title {
+  font-family: Georgia, "Playfair Display", "Times New Roman", serif;
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1.08;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.text-section-title {
+  font-family: Georgia, "Playfair Display", "Times New Roman", serif;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  line-height: 1.15;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.015em;
+}
+
+.text-curator-title {
+  font-family: Georgia, "Playfair Display", "Times New Roman", serif;
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  line-height: 1.18;
+  font-weight: 700;
+  color: var(--color-text-inverse);
+}
+
+.text-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-tag-eyebrow);
+}
+
+.text-eyebrow-light {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-gold);
+}
+
+.text-body-lead {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.text-body-regular {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+}
+
+.text-body-small {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.text-quote-highlight {
+  font-family: Georgia, "Playfair Display", "Times New Roman", serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+
+/* Layout Utilities */
+.app-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+.section-spacing {
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-spacing {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+/* Reusable Component Classes */
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid var(--color-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-outline:hover {
+  background-color: var(--color-surface-muted);
+  border-color: var(--color-text-secondary);
+}
+
+/* Navigation Pill Container */
+.header-nav-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--color-secondary);
+  border-radius: var(--radius-pill);
+  padding: 0.3125rem 0.5rem;
+}
+
+.header-nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-secondary-foreground);
+  border-radius: var(--radius-pill);
+  transition: all 0.15s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.header-nav-link:hover {
+  color: var(--color-primary);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.header-cart-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-left: 0.375rem;
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+/* Feature Mini Cards */
+.card-feature {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.375rem;
+  box-shadow: var(--shadow-subtle);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-feature:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+
+.card-feature-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.375rem;
+}
+
+.card-feature-desc {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+/* Curator Hero Card */
+.card-curator-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background-color: var(--color-surface-dark);
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: var(--shadow-card);
+}
+
+.card-curator-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(30, 26, 23, 0.1) 0%, rgba(30, 26, 23, 0.4) 40%, rgba(20, 16, 14, 0.95) 100%);
+  z-index: 10;
+}
+
+.card-curator-content {
+  position: relative;
+  z-index: 20;
+  padding: 2.25rem 2rem;
+}
+
+/* Food Spread Showcase Card */
+.card-showcase-image {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+/* Dropdown Menu for Categories */
+.category-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  width: 20rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-dropdown);
+  padding: 0.5rem;
+  z-index: 50;
+  animation: dropdownFade 0.2s ease;
+}
+
+.category-dropdown-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.category-dropdown-item:hover {
+  background-color: var(--color-surface-muted);
+}
+
+.category-item-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.category-item-desc {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin-top: 0.125rem;
+}
+
+/* Category Grid & Cards */
+.category-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-subtle);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--color-accent-gold);
+}
+
+.category-card-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background-color: var(--color-surface-muted);
+  overflow: hidden;
+}
+
+.category-card-image-wrap img {
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.category-card:hover .category-card-image-wrap img {
+  transform: scale(1.05);
+}
+
+.category-card-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.category-card-title {
+  font-family: Georgia, "Playfair Display", "Times New Roman", serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.category-card-description {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  flex-grow: 1;
+}
+
+/* Empty State */
+.empty-state-box {
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 4rem 2rem;
+  text-align: center;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.empty-state-title {
+  font-family: Georgia, "Playfair Display", "Times New Roman", serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state-desc {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+/* Product Card Component (Matching reference screenshot) */
+.product-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-subtle);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--color-border-dark);
+}
+
+.product-card-image-wrap {
+  position: relative;
+  width: 5cm;
+  height: 5cm;
+  max-width: calc(100% - 1.5rem);
+  aspect-ratio: 1 / 1;
+  background-color: #EFE8DE;
+  overflow: hidden;
+  margin: 0.875rem auto 0.25rem auto;
+  border-radius: var(--radius-md);
+}
+
+.product-card-image-wrap img {
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.product-card:hover .product-card-image-wrap img {
+  transform: scale(1.04);
+}
+
+.product-card-body {
+  padding: 0.875rem 1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 0.5rem;
+}
+
+.product-badge-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+.product-badge-secondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-foreground);
+  white-space: nowrap;
+}
+
+.product-card-title {
+  font-family: Georgia, "Playfair Display", "Times New Roman", serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.25;
+}
+
+.product-card-description {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-price-value {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.product-price-caption {
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+}
+
+.product-view-link {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  transition: color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.product-view-link:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.btn-add-cart {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border: 1px solid var(--color-primary);
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  cursor: pointer;
+  margin-top: 0.25rem;
+}
+
+.btn-add-cart:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Category Filter Chips */
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.125rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filter-chip:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.filter-chip-active {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border-color: var(--color-primary);
+  font-weight: 600;
+}
+
+.filter-chip-active:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-primary-foreground);
+}
+
+/* Product Detail / Variant Pills */
+.variant-pill-active {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border: 1px solid var(--color-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.variant-pill-inactive {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-foreground);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.variant-pill-inactive:hover {
+  background-color: var(--color-secondary-hover);
+  border-color: var(--color-border);
+}
+
+/* Product Detail Accordion */
+.product-accordion-item {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.product-accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.125rem 1.25rem;
+  font-family: Georgia, "Playfair Display", "Times New Roman", serif;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+}
+
+.product-accordion-trigger:hover {
+  background-color: var(--color-surface-muted);
+}
+
+.product-accordion-content {
+  padding: 0 1.25rem 1.25rem 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  border-top: 1px solid var(--color-border-subtle);
+  padding-top: 0.875rem;
+}
+
+/* Footer styles */
+.footer-divider {
+  border-color: var(--color-border);
+}
+
+.footer-nav-title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-terracotta);
+  margin-bottom: 1.25rem;
+}
+
+.footer-nav-link {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  transition: color 0.15s ease;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.footer-nav-link:hover {
+  color: var(--color-primary);
+}
+
+/* Form Controls */
+.input-field {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-field:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(150, 58, 31, 0.1);
+}
+
+.select-field {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+}
+
+.select-field:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(150, 58, 31, 0.1);
+}
+
+.textarea-field {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  resize: vertical;
+}
+
+.textarea-field:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(150, 58, 31, 0.1);
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
