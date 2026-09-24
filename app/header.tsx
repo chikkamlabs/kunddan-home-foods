@@ -81,7 +81,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0 pr-2">
             <div className="relative w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-[#963A1F] shadow-xs flex-shrink-0 bg-white">
               <Image
-                src="/logo.png"
+                src="/khf_logo_f.png"
                 alt="Kunddan Home Foods Logo"
                 fill
                 className="object-cover"
