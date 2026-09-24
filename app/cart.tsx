@@ -28,9 +28,8 @@ export default function CartComponent() {
     mrpTotal,
     savings,
     couponCode,
-    setCouponCode,
     couponDiscount,
-    setCouponDiscount,
+    applyCoupon,
     referralCode,
     setReferralCode,
     totalAmount,
@@ -39,34 +38,37 @@ export default function CartComponent() {
     clearCart,
   } = useCart();
 
-  const [inputCoupon, setInputCoupon] = useState(couponCode);
-  const [inputReferral, setInputReferral] = useState(referralCode);
+  const [inputCoupon, setInputCoupon] = useState(couponCode || '');
+  const [inputReferral, setInputReferral] = useState(referralCode || '');
   const [couponStatus, setCouponStatus] = useState<{
     type: 'idle' | 'success' | 'error';
     message: string;
-  }>({ type: 'idle', message: '' });
+  }>({
+    type: couponCode ? 'success' : 'idle',
+    message: couponCode && couponDiscount > 0 ? `Coupon applied: Rs. ${couponDiscount} OFF!` : '',
+  });
   const [validatingCoupon, setValidatingCoupon] = useState(false);
 
   const handleApplyCoupon = async () => {
-    if (!inputCoupon.trim()) {
-      setCouponDiscount(0);
-      setCouponCode('');
+    const cleanCoupon = (inputCoupon || couponCode).trim().toUpperCase();
+    if (!cleanCoupon) {
+      applyCoupon('', 0);
       setCouponStatus({ type: 'idle', message: '' });
       return;
     }
 
     setValidatingCoupon(true);
     try {
-      const result = await validateCoupon(inputCoupon, subTotal);
+      const result = await validateCoupon(cleanCoupon, subTotal);
       if (result.valid) {
-        setCouponCode(inputCoupon.trim().toUpperCase());
-        setCouponDiscount(result.discount);
+        applyCoupon(cleanCoupon, result.discount);
         setCouponStatus({ type: 'success', message: result.message });
       } else {
-        setCouponDiscount(0);
+        applyCoupon('', 0);
         setCouponStatus({ type: 'error', message: result.message });
       }
     } catch {
+      applyCoupon('', 0);
       setCouponStatus({ type: 'error', message: 'Could not apply coupon' });
     } finally {
       setValidatingCoupon(false);
@@ -74,7 +76,7 @@ export default function CartComponent() {
   };
 
   const handleApplyReferral = () => {
-    setReferralCode(inputReferral.trim());
+    setReferralCode(inputReferral.trim().toUpperCase());
   };
 
   return (
