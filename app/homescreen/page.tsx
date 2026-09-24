@@ -36,7 +36,7 @@ export default function HomeScreen() {
                   Explore Items
                 </Link>
                 <Link
-                  href="#contact"
+                  href="/contactus"
                   className="btn-outline inline-flex items-center justify-center"
                 >
                   Contact us

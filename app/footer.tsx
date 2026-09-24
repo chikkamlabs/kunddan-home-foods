@@ -29,7 +29,12 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#shop" className="footer-nav-link">
+                  <Link href="/aboutus" className="footer-nav-link">
+                    About us
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/products" className="footer-nav-link">
                     Shop all
                   </Link>
                 </li>
@@ -39,7 +44,7 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#track-order" className="footer-nav-link">
+                  <Link href="/trackyourorder" className="footer-nav-link">
                     Track order
                   </Link>
                 </li>
@@ -61,8 +66,8 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#contact" className="footer-nav-link">
-                    Contact
+                  <Link href="/contactus" className="footer-nav-link">
+                    Contact us
                   </Link>
                 </li>
               </ul>

@@ -194,15 +194,15 @@ export default function Header() {
                 )}
               </div>
 
-              <Link href="#story" className="header-nav-link">
-                Our Story
+              <Link href="/aboutus" className="header-nav-link">
+                About us
               </Link>
 
-              <Link href="#contact" className="header-nav-link">
+              <Link href="/contactus" className="header-nav-link">
                 Contact us
               </Link>
 
-              <Link href="#track-order" className="header-nav-link">
+              <Link href="/trackyourorder" className="header-nav-link">
                 Track your order
               </Link>
 
@@ -396,15 +396,15 @@ export default function Header() {
             </Link>
 
             <Link
-              href="#story"
+              href="/aboutus"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-lg text-sm font-medium text-[#231E1A] hover:bg-[#EFE8DE]"
             >
-              Our Story
+              About us
             </Link>
 
             <Link
-              href="#contact"
+              href="/contactus"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-lg text-sm font-medium text-[#231E1A] hover:bg-[#EFE8DE]"
             >
@@ -412,7 +412,7 @@ export default function Header() {
             </Link>
 
             <Link
-              href="#track-order"
+              href="/trackyourorder"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-lg text-sm font-medium text-[#231E1A] hover:bg-[#EFE8DE]"
             >

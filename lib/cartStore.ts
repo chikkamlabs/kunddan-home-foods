@@ -27,11 +27,27 @@ export interface CartSummary {
 }
 
 const CART_STORAGE_KEY = 'kunddan_cart_data_v1';
+const CART_META_STORAGE_KEY = 'kunddan_cart_meta_v1';
 const CART_EVENT = 'kunddan_cart_updated';
+
+export interface CartMeta {
+  couponCode: string;
+  couponDiscount: number;
+  referralCode: string;
+}
+
+const defaultCartMeta: CartMeta = {
+  couponCode: '',
+  couponDiscount: 0,
+  referralCode: '',
+};
 
 // In-memory cache for useSyncExternalStore snapshot
 let cachedSnapshot: CartItem[] = [];
 let rawSnapshotString: string | null = null;
+
+let cachedMetaSnapshot: CartMeta = defaultCartMeta;
+let rawMetaSnapshotString: string | null = null;
 
 function subscribeCart(callback: () => void) {
   if (typeof window === 'undefined') return () => {};
@@ -59,9 +75,33 @@ function getCartSnapshot(): CartItem[] {
   }
 }
 
+function getCartMetaSnapshot(): CartMeta {
+  if (typeof window === 'undefined') return defaultCartMeta;
+  try {
+    const raw = localStorage.getItem(CART_META_STORAGE_KEY) || '{}';
+    if (raw !== rawMetaSnapshotString) {
+      rawMetaSnapshotString = raw;
+      const parsed = JSON.parse(raw);
+      cachedMetaSnapshot = {
+        couponCode: typeof parsed.couponCode === 'string' ? parsed.couponCode : '',
+        couponDiscount: typeof parsed.couponDiscount === 'number' ? parsed.couponDiscount : 0,
+        referralCode: typeof parsed.referralCode === 'string' ? parsed.referralCode : '',
+      };
+    }
+    return cachedMetaSnapshot;
+  } catch (err) {
+    console.error('Error reading cart meta snapshot:', err);
+    return defaultCartMeta;
+  }
+}
+
 const serverSnapshot: CartItem[] = [];
 function getServerSnapshot(): CartItem[] {
   return serverSnapshot;
+}
+
+function getServerMetaSnapshot(): CartMeta {
+  return defaultCartMeta;
 }
 
 /**
@@ -69,6 +109,13 @@ function getServerSnapshot(): CartItem[] {
  */
 export function getCartItems(): CartItem[] {
   return getCartSnapshot();
+}
+
+/**
+ * Get the current cart metadata from localStorage.
+ */
+export function getCartMeta(): CartMeta {
+  return getCartMetaSnapshot();
 }
 
 /**
@@ -82,6 +129,39 @@ export function saveCartItems(items: CartItem[]): void {
   } catch (err) {
     console.error('Error saving cart to storage:', err);
   }
+}
+
+/**
+ * Save cart metadata to localStorage and notify listeners.
+ */
+export function saveCartMeta(meta: Partial<CartMeta>): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const current = getCartMetaSnapshot();
+    const updated: CartMeta = {
+      couponCode: meta.couponCode !== undefined ? meta.couponCode : current.couponCode,
+      couponDiscount: meta.couponDiscount !== undefined ? meta.couponDiscount : current.couponDiscount,
+      referralCode: meta.referralCode !== undefined ? meta.referralCode : current.referralCode,
+    };
+    localStorage.setItem(CART_META_STORAGE_KEY, JSON.stringify(updated));
+    window.dispatchEvent(new Event(CART_EVENT));
+  } catch (err) {
+    console.error('Error saving cart meta to storage:', err);
+  }
+}
+
+/**
+ * Set coupon in cart metadata.
+ */
+export function setCartCoupon(couponCode: string, couponDiscount: number): void {
+  saveCartMeta({ couponCode, couponDiscount });
+}
+
+/**
+ * Set referral code in cart metadata.
+ */
+export function setCartReferral(referralCode: string): void {
+  saveCartMeta({ referralCode });
 }
 
 /**
@@ -173,10 +253,11 @@ export function removeFromCart(cart_item_id: string): void {
 }
 
 /**
- * Clear all items from the cart.
+ * Clear all items from the cart and reset coupon metadata.
  */
 export function clearCart(): void {
   saveCartItems([]);
+  saveCartMeta({ couponCode: '', couponDiscount: 0, referralCode: '' });
 }
 
 /**
@@ -184,15 +265,33 @@ export function clearCart(): void {
  */
 export function useCart() {
   const items = useSyncExternalStore(subscribeCart, getCartSnapshot, getServerSnapshot);
-  const [couponCode, setCouponCode] = useState<string>('');
-  const [couponDiscount, setCouponDiscount] = useState<number>(0);
-  const [referralCode, setReferralCode] = useState<string>('');
+  const meta = useSyncExternalStore(subscribeCart, getCartMetaSnapshot, getServerMetaSnapshot);
+
+  const couponCode = meta.couponCode;
+  const couponDiscount = meta.couponDiscount;
+  const referralCode = meta.referralCode;
 
   const totalQuantity = items.reduce((acc, i) => acc + i.quantity, 0);
   const subTotal = Number(items.reduce((acc, i) => acc + i.line_total, 0).toFixed(2));
   const mrpTotal = Number(items.reduce((acc, i) => acc + (i.mrp * i.quantity), 0).toFixed(2));
   const savings = Number((mrpTotal - subTotal).toFixed(2));
   const totalAmount = Math.max(0, Number((subTotal - couponDiscount).toFixed(2)));
+
+  const setCouponCode = (code: string) => {
+    saveCartMeta({ couponCode: code });
+  };
+
+  const setCouponDiscount = (discount: number) => {
+    saveCartMeta({ couponDiscount: discount });
+  };
+
+  const setReferralCode = (ref: string) => {
+    saveCartMeta({ referralCode: ref });
+  };
+
+  const applyCoupon = (code: string, discount: number) => {
+    saveCartMeta({ couponCode: code, couponDiscount: discount });
+  };
 
   return {
     items,
@@ -204,6 +303,7 @@ export function useCart() {
     setCouponCode,
     couponDiscount,
     setCouponDiscount,
+    applyCoupon,
     referralCode,
     setReferralCode,
     totalAmount,
