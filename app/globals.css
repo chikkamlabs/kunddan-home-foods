@@ -445,16 +445,13 @@
   box-shadow: var(--shadow-card);
   border-color: var(--color-border-dark);
 }
-
 .product-card-image-wrap {
   position: relative;
-  width: 5cm;
-  height: 5cm;
-  max-width: calc(100% - 1.5rem);
-  aspect-ratio: 1 / 1;
+  width: calc(100% - 1.5rem);
+  aspect-ratio: 16 / 9;
   background-color: #EFE8DE;
   overflow: hidden;
-  margin: 0.875rem auto 0.25rem auto;
+  margin: 0.75rem auto 0 auto;
   border-radius: var(--radius-md);
 }
 
